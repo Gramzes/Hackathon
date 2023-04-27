@@ -12,8 +12,8 @@ import java.io.FileOutputStream
 
 object BookService {
 
-    suspend fun getTextByUri(uri: Uri, context: Context): String = withContext(Dispatchers.IO){
-        val fileName = "book" + "." + uri.toString().substringAfterLast('.')
+    suspend fun getTextByUri(uri: Uri, ext: String, context: Context): String = withContext(Dispatchers.IO){
+        val fileName = "book.$ext"
         val src = context.contentResolver.openInputStream(uri)!!;
         val dst = FileOutputStream(File(context.cacheDir, fileName))
         src.copyTo(dst)
