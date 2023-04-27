@@ -75,7 +75,7 @@ object BookService {
             for (startIndex in w.indexes){
                 var currentIndex = startIndex
                 do{
-                    val ch = string[startIndex]
+                    val ch = string[currentIndex]
                     currentIndex++
                 } while (ch.isLetter() && string.length>currentIndex)
                 var left = startIndex - offset

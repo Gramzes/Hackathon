@@ -10,9 +10,6 @@ import java.util.stream.Collectors;
 public class TextProcessor {
 
     BufferedReader txtFile;
-    public TextProcessor(BufferedReader txtFile){
-        this.txtFile = txtFile;
-    }
     private final RootFinder finder = new RootFinder();
 
     private static class ProcessingWord implements Comparable<ProcessingWord> {

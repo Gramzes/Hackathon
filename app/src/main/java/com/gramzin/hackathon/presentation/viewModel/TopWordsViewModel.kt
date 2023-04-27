@@ -4,27 +4,27 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.gramzin.hackathon.data.Word
 import com.gramzin.hackathon.data.toWord
-import com.gramzin.hackathon.java.RootFinder
 import com.gramzin.hackathon.java.TextProcessor
-import com.gramzin.hackathon.java.aot.WordformMeaning
+import kotlinx.coroutines.launch
 
 class TopWordsViewModel(private val app: Application, string: String): AndroidViewModel(app) {
     private val words_ = MutableLiveData<List<Word>>()
     val words = words_ as LiveData<List<Word>>
-
+    private val time_ = MutableLiveData<String>()
+    val time = time_ as LiveData<String>
     init {
         getWords(string)
     }
 
     private fun getWords(string: String){
-        val bfReader = app.assets.open("root/roots.txt").bufferedReader()
-        WordformMeaning.archiveIS = app.assets.open("root/mrd")
-        WordformMeaning.initMeth()
-        RootFinder.txtFile = bfReader
-        words_.value = TextProcessor(bfReader).process(string).map {
-            it.toWord()
+        viewModelScope.launch {
+            val timeStart =System.nanoTime()
+            val words = TextProcessor().process(string).map {
+                it.toWord()
+            }
+            time_.postValue(((System.nanoTime() - timeStart)/1_000_000).toString() + "мс.")
+            words_.postValue(words.sortedByDescending { it.word.length })
         }
-
     }
 
     class Factory(private val app: Application, private val string: String): ViewModelProvider.Factory{

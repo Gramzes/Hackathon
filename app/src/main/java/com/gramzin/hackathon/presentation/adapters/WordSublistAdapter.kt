@@ -12,8 +12,7 @@ class WordSublistAdapter(private val word: Word):
     class WordSublistHolder(private val binding: SubwordHolderBinding):
         RecyclerView.ViewHolder(binding.root){
         fun bind(word: Word){
-            binding.wordInfo.text = word.word
-            "${word.word}, ${word.indexes.size} раз"
+            binding.wordInfo.text = "${word.word}, ${word.indexes.size} раз"
         }
     }
 

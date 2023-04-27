@@ -20,7 +20,7 @@ class WordListAdapter(private val onClick: (Word) -> Unit): RecyclerView.Adapter
         fun bind(word: Word){
             binding.info.setOnClickListener { onClick(word) }
             binding.rcView.adapter = WordSublistAdapter(word)
-            binding.wordInfo.text = "${word.word}, ${word.children.size} раз"
+            binding.wordInfo.text = "${word.word}, ${word.indexes.size} раз"
         }
     }
 

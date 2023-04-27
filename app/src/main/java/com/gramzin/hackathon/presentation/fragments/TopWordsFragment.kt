@@ -37,6 +37,9 @@ class TopWordsFragment : Fragment() {
         viewModel.words.observe(viewLifecycleOwner){
             adapter.addWords(it)
         }
+        viewModel.time.observe(viewLifecycleOwner){
+            binding.textView2.text = it
+        }
         return binding.root
     }
 

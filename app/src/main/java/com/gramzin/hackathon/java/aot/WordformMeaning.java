@@ -53,7 +53,7 @@ public class WordformMeaning {
 
     public static void initMeth() {
         //WordformMeaning.class.getResourceAsStream("/mrd.gz")
-        try (DataInputStream file = new DataInputStream(new GZIPInputStream(archiveIS))) {
+        try (DataInputStream file = new DataInputStream(archiveIS)) {
             allMorphologyTags = readMorph(readBlockFrom(file));
             allFlexionStrings = readStrings(readBlockFrom(file));
             lemmas = readLemmas(readBlockFrom(file));

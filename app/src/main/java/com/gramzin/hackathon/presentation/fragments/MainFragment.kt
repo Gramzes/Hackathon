@@ -3,7 +3,10 @@ package com.gramzin.hackathon.presentation.fragments
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
+import android.os.Build
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +19,8 @@ import androidx.navigation.fragment.findNavController
 import com.gramzin.hackathon.R
 import com.gramzin.hackathon.data.BookService
 import com.gramzin.hackathon.databinding.FragmentMainBinding
+import com.gramzin.hackathon.java.RootFinder
+import com.gramzin.hackathon.java.aot.WordformMeaning
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,7 +47,17 @@ class MainFragment : Fragment() {
             val uri = result.data?.data
 
             uri?.let {
-                val extension = uri.toString().substringAfterLast('.')
+                val cursor: Cursor = requireContext().getContentResolver().query(uri, null, null, null, null)!!
+                var displayName = ""
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        val colInd = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                        displayName = cursor.getString(colInd)
+                    }
+                } finally {
+                    cursor.close()
+                }
+                val extension = displayName.substringAfterLast('.')
                 if (extension == "fb2" || extension == "epub" || extension == "txt") {
                     val job = Job()
                     val coroutineScope = CoroutineScope(job)
@@ -50,6 +65,15 @@ class MainFragment : Fragment() {
                         binding.progressBar.visibility = View.VISIBLE
                         binding.chooseFileButton.isEnabled = false
                         val bookText = BookService.getTextByUri(uri, requireContext())
+                        if (WordformMeaning.archiveIS == null) {
+                            val bfReader = requireActivity().application
+                                .assets.open("root/roots.txt").bufferedReader()
+                            WordformMeaning.archiveIS = requireActivity().application
+                                .assets.open("root/MRD.BIN")
+                            WordformMeaning.initMeth()
+                            RootFinder.txtFile = bfReader
+                            RootFinder.initMeth()
+                        }
                         binding.chooseFileButton.isEnabled = true
                         binding.progressBar.visibility = View.GONE
                         val bundle = bundleOf("root" to bookText)
@@ -80,6 +104,9 @@ class MainFragment : Fragment() {
 
     private fun downloadFile(){
         when {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ->{
+                openSelectDocIntent()
+            }
             ContextCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.READ_EXTERNAL_STORAGE

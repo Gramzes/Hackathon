@@ -21,7 +21,7 @@ public class RootFinder {
         }
     }
 
-    public void initMeth() {
+    public static void initMeth() {
         try (var r = txtFile) {
             String line;
             while ((line = r.readLine()) != null) {
@@ -44,7 +44,6 @@ public class RootFinder {
     }
 
     public List<Scope> getScopes(String word) {
-        initMeth();
         if(wordsMap.containsKey(word))
             return wordsMap.get(word);
         if(!word.matches("^[а-яА-ЯёЁ]+?$"))
