@@ -64,7 +64,7 @@ class MainFragment : Fragment() {
                     coroutineScope.launch(Dispatchers.Main) {
                         binding.progressBar.visibility = View.VISIBLE
                         binding.chooseFileButton.isEnabled = false
-                        val bookText = BookService.getTextByUri(uri, requireContext())
+                        val bookText = BookService.getTextByUri(uri, extension, requireContext())
                         if (WordformMeaning.archiveIS == null) {
                             val bfReader = requireActivity().application
                                 .assets.open("root/roots.txt").bufferedReader()
