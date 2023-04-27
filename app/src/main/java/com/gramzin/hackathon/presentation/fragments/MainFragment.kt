@@ -92,7 +92,7 @@ class MainFragment : Fragment() {
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
-            if (isGranted) {
+            if (isGranted || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 openSelectDocIntent()
             } else {
                 Toast.makeText(requireContext(),
