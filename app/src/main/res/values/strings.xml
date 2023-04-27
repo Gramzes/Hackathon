@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Hackathon</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="load_file">Загрузить файл</string>
+    <string name="available_extensions">Доступна загрузка файлов с расширением fb2, epub, txt</string>
+    <string name="wrong_extension">Недопустимое расширение файла</string>
+    <string name="permsion_denied">Приложение не может работать без этого разрешения</string>
+</resources>
